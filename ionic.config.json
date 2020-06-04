@@ -1,0 +1,7 @@
+{
+  "name": "prolineApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
