@@ -3,16 +3,13 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { BASE_URL } from './urlPrefix';
 /* 防止重复提交，利用axios的cancelToken */
-let pending: string[] = []; // 声明一个数组用于存储每个ajax请求的取消函数和ajax标识
+let pending = new Set<string>(); // 声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 
 console.log(BASE_URL);
 
 function removePending(url?: string) {
   if (url) {
-    const index = pending.indexOf(url);
-    if (index !== -1) {
-      pending.splice(index, 1);
-    }
+    pending.delete(url);
   }
 }
 
@@ -59,7 +56,7 @@ request.interceptors.response.use(
   (error: any) => {
     // 异常处理
     console.log(error);
-    pending = [];
+    pending = new Set<string>();
     //  if (error.message === '取消重复请求') {
     //      return Promise.reject(error);
     //  }
@@ -73,8 +70,11 @@ export default function requestUtil(
   config?: AxiosRequestConfig,
   noCancel?: boolean
 ) {
-  if (noCancel || pending.indexOf(url) === -1) {
-    pending.push(url);
+  if (noCancel) {
+    return request.request({ ...config, url });
+  }
+  if (!pending.has(url)) {
+    pending.add(url);
     return request.request({ ...config, url });
   } else {
     return Promise.reject(`${url}上一次请求并未结束！`);
