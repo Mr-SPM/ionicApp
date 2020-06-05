@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { RawIntlProvider, createIntl, createIntlCache } from 'react-intl';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,15 +24,35 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+import en_US from './locales/en_US';
+import zh_CN from './locales/zh_CN';
+
+const initialLocale = 'en-US';
+const messages = {
+  'zh-CN': zh_CN,
+  'en-US': en_US,
+};
+
+export const cache = createIntlCache();
+/** You can use this variable in other files even after reassigning it. */
+export let intl = createIntl(
+  { locale: initialLocale, messages: messages[initialLocale] },
+  cache
 );
+
+const App: React.FC = () => {
+  return (
+    <IonApp>
+      <RawIntlProvider value={intl}>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route path="/home" component={Home} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </RawIntlProvider>
+    </IonApp>
+  );
+};
 
 export default App;
