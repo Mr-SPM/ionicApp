@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 import { useRequest } from '@umijs/hooks';
 import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+import './Home.scss';
 import { useFormatMessage } from '../utils/intlHelpers';
 import { fetchTest } from './service';
 
@@ -49,6 +49,11 @@ const Home: React.FC = () => {
           onIonChange={({ detail }) => setText(detail.value!)}
         ></IonInput>
         <IonButton onClick={fetchData}>提交</IonButton>
+        <img
+          className="testImage"
+          src="./assets/icon/icon.png"
+          alt="logo"
+        ></img>
       </IonContent>
     </IonPage>
   );

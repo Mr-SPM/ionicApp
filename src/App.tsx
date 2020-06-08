@@ -23,6 +23,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './styles/index.scss';
 
 import en_US from './locales/en_US';
 import zh_CN from './locales/zh_CN';
